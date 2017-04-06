@@ -1,34 +1,34 @@
-### Basic Yelp client
+# Yelp
+iOS bootcamp 2017 project 2 
 
-This is a headless example of how to implement an OAuth 1.0a Yelp API client. The Yelp API provides an application token that allows applications to make unauthenticated requests to their search API.
+This is an iOS demo application for displaying the latest box office movies using the [The Movie Database API](https://www.themoviedb.org/documentation/api).
 
-### Next steps
+Time spent: 13 hours spent in total
 
-- Check out `BusinessesViewController.swift` to see how to use the `Business` model.
+Completed user stories:
 
-### Sample request
+Search results page
+ * [x] Required: Table rows should be dynamic height according to the content height.
+ * [x] Required: Custom cells should have the proper Auto Layout constraints.
+ * [ ] Required: Search bar should be in the navigation bar.
+ * [ ] Optional: Infinite scroll for restaurant results
+ * [ ] Optional: Implement map view of restaurant results
+ 
+Filter page
+ * [ ] Required: Implemente the follwoing filters : category, sort (best match, distance, highest rated), distance, deals (on/off).
+ * [ ] Required: The filters table should be organized into sections as in the mock.
+ * [ ] Required: You can use the default UISwitch for on/off states. 
+ * [ ] Required: Clicking on the "Search" button should dismiss the filters page and trigger the search w/ the new filter settings.
+ * [ ] Optional: Implement a custom switch
+ * [ ] Optional: Distance filter should expand as in the real Yelp app.
+ * [ ] Optional: Categories should show a subset of the full list with a "See All" row to expand.
+ * [ ] Optional: Implement the restaurant detail page.
 
-**Basic search with query**
+ 
+Notes:
 
-```
-Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
-    self.businesses = businesses
-    
-    for business in businesses {
-        print(business.name!)
-        print(business.address!)
-    }
-})
-```
+Walkthrough of all user stories:
 
-**Advanced search with categories, sort, and deal filters**
+![Video Walkthrough]()
 
-```
-Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
-
-    for business in businesses {
-        print(business.name!)
-        print(business.address!)
-    }
-}
-```
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
