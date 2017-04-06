@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  Yelp
 //
-//  Created by Timothy Lee on 9/19/14.
-//  Copyright (c) 2014 Timothy Lee. All rights reserved.
+//  Created by Rui Mao on 4/5/17.
+//  Copyright (c) 2017 Rui Mao. All rights reserved.
 //
 
 import UIKit
