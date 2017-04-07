@@ -75,10 +75,11 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     
+    
      // MARK: - Navigation
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
-     func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let navigationController = segue.destination as! UINavigationController
         let filterViewController =
         navigationController.topViewController as! filterViewController
