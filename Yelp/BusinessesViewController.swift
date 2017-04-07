@@ -8,9 +8,11 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, filterViewControllerDelegate {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, filterViewControllerDelegate, UISearchResultsUpdating {
     
     var businesses: [Business]!
+    var filteredData: [Business] = []
+    var searchController: UISearchController!
     
     @IBOutlet weak var tableView: UITableView!
 
@@ -19,8 +21,16 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
+
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
+        
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        
+        searchController.dimsBackgroundDuringPresentation = false
+        tableView.tableHeaderView = searchController.searchBar
+        definesPresentationContext = true
         
         Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
@@ -35,27 +45,35 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             
             }
         )
+        //filteredData = (businesses?)!
         }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection: Int) -> Int {
-            if businesses != nil {
+            /*if businesses != nil {
             return businesses!.count
             }
             else {
                 return 0
-            }
+            }*/
+        return filteredData.count
         }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath as IndexPath) as! BusinessCell
             
-            cell.business = businesses[indexPath.row]
+            cell.business = filteredData[indexPath.row]
             return cell
         }
-        
     
-        
-        
+    func updateSearchResults(for searchController: UISearchController) {
+        if let searchText = searchController.searchBar.text {
+            self.filteredData = searchText.isEmpty ? self.businesses! : self.businesses.filter({(business: Business) -> Bool in
+                return (business.name)?.range(of: searchText, options: .caseInsensitive) != nil
+                })
+            tableView.reloadData()
+        }
+    }
+    
         /* Example of Yelp search with more search options specified
          Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
          self.businesses = businesses
