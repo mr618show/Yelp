@@ -10,7 +10,7 @@ Completed user stories:
 Search results page
  * [x] Required: Table rows should be dynamic height according to the content height.
  * [x] Required: Custom cells should have the proper Auto Layout constraints.
- * [ ] Required: Search bar should be in the navigation bar.
+ * [x] Required: Search bar should be in the navigation bar.
  * [ ] Optional: Infinite scroll for restaurant results
  * [ ] Optional: Implement map view of restaurant results
  
