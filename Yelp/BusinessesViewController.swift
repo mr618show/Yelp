@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, filterViewControllerDelegate, UISearchResultsUpdating {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, filtersTableViewControllerDelegate, UISearchResultsUpdating {
     
     var businesses: [Business]!
     var filteredData: [Business] = []
@@ -44,8 +44,6 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             }
         })
     }
-    
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection: Int) -> Int {
         /*if businesses != nil {
@@ -98,19 +96,58 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let navigationController = segue.destination as! UINavigationController
-        let filterViewController =
-            navigationController.topViewController as! filterViewController
-        filterViewController.delegate = self
+        let filtersTableViewController =
+            navigationController.topViewController as! filtersTableViewController
+        filtersTableViewController.delegate = self
     }
+
     
-    func filterViewController(filterViewController: filterViewController, didUpdateFilters filters: [String : AnyObject]) {
-        let categories = filters["categories"] as? [String]
-        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil) {
+    func didUpdateFilters (_ controller: filtersTableViewController){
+        
+        var parameters = ["category_filter": "thai", "radius_filter": "", "sort": "bestMatched"]
+        
+        for (key, value) in YelpFilters.instance.parameters {
+            parameters[key] = value
+        }
+        let categories = [parameters["category_filter"]!] as [String]
+        
+        var sort =  YelpSortMode.bestMatched
+        if parameters["sort"] == "0" {
+            sort = YelpSortMode.bestMatched
+        }
+        else if parameters["sort"] == "1"{
+            sort = YelpSortMode.distance
+            
+        }
+        else {
+            sort = YelpSortMode.highestRated
+        }
+        
+        //        var distance = " "
+        //        if parameters["radius_filter"] == "483" {
+        //            distance = "0.3 miles"
+        //        }
+        //        else if parameters["radius_filter"] == "1609" {
+        //            distance = "1 mile"
+        //        }
+        //        else if parameters["radius_filter"] == "8047" {
+        //            distance = "5 miles"
+        //        }
+        //        else  {
+        //            distance = "20 miles"
+        //        }
+        
+        let distance = Int(parameters["radius_filter"]!)
+        
+        let deal = (parameters["deals_filter"] != nil) as Bool
+        
+        self.filteredData.removeAll()
+        self.tableView.reloadData()
+        Business.searchWithTerm(term: "Restaurants", sort: sort, distance: distance, categories: categories, deals: deal) {
             (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.filteredData = self.businesses
             self.tableView.reloadData()
         }
     }
-    
 }
