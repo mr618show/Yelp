@@ -30,6 +30,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         
         searchController.dimsBackgroundDuringPresentation = false
         tableView.tableHeaderView = searchController.searchBar
+        searchController.searchBar.placeholder = "Restaurant"
         definesPresentationContext = true
         
         Business.searchWithTerm(term: "", completion: { (businesses: [Business]?, error: Error?) -> Void in
