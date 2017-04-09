@@ -32,7 +32,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         tableView.tableHeaderView = searchController.searchBar
         definesPresentationContext = true
         
-        Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: "", completion: { (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             if let businesses = businesses {
                 for business in businesses {
@@ -65,7 +65,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text {
             self.filteredData = searchText.isEmpty ? self.businesses! : self.businesses.filter({(business: Business) -> Bool in
-                return (business.name)?.range(of: searchText, options: .caseInsensitive) != nil
+                return (business.categories)?.range(of: searchText, options: .caseInsensitive) != nil
             })
             tableView.reloadData()
         }
@@ -81,8 +81,6 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
      }
      }
      */
-    
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -122,20 +120,6 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         else {
             sort = YelpSortMode.highestRated
         }
-        
-        //        var distance = " "
-        //        if parameters["radius_filter"] == "483" {
-        //            distance = "0.3 miles"
-        //        }
-        //        else if parameters["radius_filter"] == "1609" {
-        //            distance = "1 mile"
-        //        }
-        //        else if parameters["radius_filter"] == "8047" {
-        //            distance = "5 miles"
-        //        }
-        //        else  {
-        //            distance = "20 miles"
-        //        }
         
         let distance = Int(parameters["radius_filter"]!)
         
