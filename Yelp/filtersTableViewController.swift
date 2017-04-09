@@ -130,7 +130,7 @@ class filtersTableViewController: UITableViewController {
             cell.textLabel?.text = option.label
             cell.selectionStyle = UITableViewCellSelectionStyle.none
             let switchView = UISwitch(frame: CGRect(x:100, y:100, width:0, height: 0))
-            switchView.onImage = UIImage(named:"Logo")
+            //switchView.onImage = UIImage(named:"Logo")
             switchView.isOn = option.selected
             switchView.onTintColor = UIColor(red: 73.0/255.0, green: 134.0/255.0, blue: 231.0/255.0, alpha: 1.0)
             switchView.addTarget(self, action: #selector(filtersTableViewController.handleSwitchValueChanged(_:)), for: UIControlEvents.valueChanged)
@@ -173,7 +173,8 @@ class filtersTableViewController: UITableViewController {
             } else {
                 let option = filter.options[indexPath.row]
                 option.selected = !option.selected
-                self.tableView.reloadRows(at: [indexPath as IndexPath], with: .automatic)
+//                self.tableView.reloadRows(at: [indexPath as IndexPath], with: .automatic)
+                self.tableView.reloadSections(NSMutableIndexSet(index: indexPath.section) as IndexSet, with: .automatic)
             }
         default:
             break
