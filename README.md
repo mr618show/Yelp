@@ -22,11 +22,14 @@ Filter page
  * [x] Optional: Implement a custom switch
  * [x] Optional: Distance filter should expand as in the real Yelp app.
  * [x] Optional: Categories should show a subset of the full list with a "See All" row to expand.
- * [x] Optional: User sees loading state while waiting for Yelp API. 
  * [ ] Optional: Implement the restaurant detail page.
 
  
 Notes:
+Extra features implemented:
+ * [x] User sees loading state while waiting for Yelp API. 
+ * [x] Filters view cateogries section shows currently the number of options selected when the section is collapsed. 
+
 
 Walkthrough of all user stories:
 
