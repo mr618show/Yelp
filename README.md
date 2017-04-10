@@ -1,7 +1,7 @@
 # Yelp
 iOS bootcamp 2017 project 2 
 
-This is an iOS demo application for displaying the latest box office movies using the [The Movie Database API](https://www.themoviedb.org/documentation/api).
+This is an iOS demo application for displaying and querying restaurants informaton using the [The Yelp Search API](https://www.yelp.com/developers/documentation/v2/search_api).
 
 Time spent: 22 hours spent in total
 
