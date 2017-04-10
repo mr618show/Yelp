@@ -3,7 +3,7 @@ iOS bootcamp 2017 project 2
 
 This is an iOS demo application for displaying the latest box office movies using the [The Movie Database API](https://www.themoviedb.org/documentation/api).
 
-Time spent: 18 hours spent in total
+Time spent: 22 hours spent in total
 
 Completed user stories:
 
@@ -19,7 +19,7 @@ Filter page
  * [x] Required: The filters table should be organized into sections as in the mock.
  * [x] Required: Use the default UISwitch for on/off states. 
  * [x] Required: Clicking on the "Search" button should dismiss the filters page and trigger the search w/ the new filter settings.
- * [ ] Optional: Implement a custom switch
+ * [x] Optional: Implement a custom switch
  * [x] Optional: Distance filter should expand as in the real Yelp app.
  * [x] Optional: Categories should show a subset of the full list with a "See All" row to expand.
  * [ ] Optional: Implement the restaurant detail page.
