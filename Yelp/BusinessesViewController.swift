@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, filtersTableViewControllerDelegate, UISearchResultsUpdating {
     
@@ -47,12 +48,6 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection: Int) -> Int {
-        /*if businesses != nil {
-         return businesses!.count
-         }
-         else {
-         return 0
-         }*/
         return filteredData.count
     }
     
@@ -128,10 +123,12 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         
         self.filteredData.removeAll()
         self.tableView.reloadData()
+        MBProgressHUD.showAdded(to: self.view, animated: true)
         Business.searchWithTerm(term: "Restaurants", sort: sort, distance: distance, categories: categories, deals: deal) {
             (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.filteredData = self.businesses
+             MBProgressHUD.hide(for: self.view, animated: true)
             self.tableView.reloadData()
         }
     }
