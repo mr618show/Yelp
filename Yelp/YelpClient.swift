@@ -43,8 +43,8 @@ class YelpClient: BDBOAuth1RequestOperationManager {
         self.requestSerializer.saveAccessToken(token)
     }
     
-    func searchWithTerm(_ term: String, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
-        return searchWithTerm(term, sort: nil, distance: nil, categories: nil, deals: nil, completion: completion)
+    func searchWithTerm(_ term: String, distance: Int, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
+        return searchWithTerm(term, sort: nil, distance: distance, categories: nil, deals: nil, completion: completion)
     }
     
     func searchWithTerm(_ term: String, sort: YelpSortMode?, distance: Int?, categories: [String]?, deals: Bool?, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {

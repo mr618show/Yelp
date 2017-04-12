@@ -9,11 +9,14 @@
 import UIKit
 import MBProgressHUD
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, filtersTableViewControllerDelegate, UISearchResultsUpdating {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, filtersTableViewControllerDelegate, UISearchResultsUpdating, UIScrollViewDelegate {
     
     var businesses: [Business]!
     var filteredData: [Business] = []
+    var initialDistance = 1000
     var searchController: UISearchController!
+    var isMoreDataLoading = false
+    var loadingMoreView: InfiniteScrollActivityView?
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -34,7 +37,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         searchController.searchBar.placeholder = "Restaurant"
         definesPresentationContext = true
         
-        Business.searchWithTerm(term: "", completion: { (businesses: [Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: "Restaurant", distance: self.initialDistance, completion: { (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             if let businesses = businesses {
                 for business in businesses {
@@ -45,7 +48,19 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
                 self.tableView.reloadData()
             }
         })
+        
+        let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
+        loadingMoreView = InfiniteScrollActivityView(frame: frame)
+        loadingMoreView!.isHidden = true
+        tableView.addSubview(loadingMoreView!)
+        
+        var insets = tableView.contentInset
+        insets.bottom += InfiniteScrollActivityView.defaultHeight
+        tableView.contentInset = insets
+        
     }
+    
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection: Int) -> Int {
         return filteredData.count
@@ -94,11 +109,11 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             navigationController.topViewController as! filtersTableViewController
         filtersTableViewController.delegate = self
     }
-
+    
     
     func didUpdateFilters (_ controller: filtersTableViewController){
         
-        var parameters = ["category_filter": "thai", "radius_filter": "", "sort": "bestMatched"]
+        var parameters = ["category_filter": "", "radius_filter": "", "sort": "bestMatched"]
         
         for (key, value) in YelpFilters.instance.parameters {
             parameters[key] = value
@@ -116,6 +131,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         else {
             sort = YelpSortMode.highestRated
         }
+ 
         
         let distance = Int(parameters["radius_filter"]!)
         
@@ -128,8 +144,36 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.filteredData = self.businesses
-             MBProgressHUD.hide(for: self.view, animated: true)
+            MBProgressHUD.hide(for: self.view, animated: true)
             self.tableView.reloadData()
+        }
+    }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+                
+                isMoreDataLoading = true
+                let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
+                loadingMoreView?.frame = frame
+                loadingMoreView!.startAnimating()
+                self.initialDistance = self.initialDistance + 1000
+                Business.searchWithTerm(term: "Restuarants", distance: self.initialDistance, completion: { (businesses: [Business]?, error: Error?) -> Void in
+                    
+                    self.businesses = businesses
+                    self.filteredData = self.businesses
+                    self.tableView.reloadData()
+                    self.isMoreDataLoading = false
+                    self.loadingMoreView!.stopAnimating()
+                })
+                
+            }
         }
     }
 }
